@@ -9,7 +9,7 @@ public class DbUtil {
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con=DriverManager.getConnection("jdbc:mysql://localhost/weather","root","M!rR0rs$");
+			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/weather","root","password");
 			return con;
 			
 		}
