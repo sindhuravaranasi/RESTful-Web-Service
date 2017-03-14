@@ -19,20 +19,24 @@ public class WeatherDao {
 		con=sq.getConnection();
 	}
 	
-	public ArrayList<WeatherDate> getAllDates() throws Exception
+	public ArrayList<WeatherPojo> getAllDates() throws Exception
 	{
-		ArrayList<WeatherDate> w=new ArrayList<WeatherDate>();
+		ArrayList<WeatherPojo> w=new ArrayList<WeatherPojo>();
 		try {
 			
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery("select * from daily");
+           
+            
             while (rs.next())
             {
-            	WeatherDate wv=new WeatherDate();
+            	 
+            	WeatherPojo wv=new WeatherPojo();
 				Date DATE = rs.getDate(1);
 				SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-				String format = formatter.format(DATE);
-				wv.setDate(format);
+				String f = formatter.format(DATE);
+				//wv.setDATE(format);
+				wv.DATE=f;
 				w.add(wv);
             }
             
@@ -62,9 +66,16 @@ public class WeatherDao {
 	            ResultSet rs = preparedStatement.executeQuery();
 	            if (rs.next()) {
 	            	 
-	                w.setDate(sm.format(rs.getDate(1)));
-	                w.setTMax(rs.getDouble(2));
-	                w.setTMin(rs.getDouble(3));
+	               /*w.setDATE(sm.format(rs.getDate(1)));
+	                w.setTMAX(rs.getDouble(2));
+	                w.setTMIN(rs.getDouble(3));
+	                */
+	                w.DATE=sm.format(rs.getDate(1));
+	                w.TMAX=rs.getDouble(2);
+	                w.TMIN=rs.getDouble(3);
+	                
+	            	
+	            	
 	            	
 	               
 	            }
@@ -80,39 +91,26 @@ public class WeatherDao {
 	{
 		try 
 		{
-			String DATE=weather.getDate();
-			double TMAX=weather.getTMax();
-			double TMIN=weather.getTMin();
+			//String date=weather.getDATE();
+			
 			
 			SimpleDateFormat sm=new SimpleDateFormat("yyyyMMdd");
 			
-	            PreparedStatement preparedStatement = con.prepareStatement("select * from daily where dailydate=?");
-	           Date d=sm.parse(DATE);
-	           preparedStatement.setDate(1,(new java.sql.Date( d.getTime())));
+	          
+	           Date d=sm.parse(weather.DATE);
+	           //preparedStatement.setDate(1,(new java.sql.Date( d.getTime())));
 	           
-	            ResultSet rs = preparedStatement.executeQuery();
-	            boolean flag=rs.last();
-	            int r=-1;
-	            if(flag)
-	            	r=rs.getRow();
-	            if(r==0)
-	            {
-	            	PreparedStatement ps = con.prepareStatement("insert into daily(DAILYDATE,TMAX,TMIN) values (?, ?, ?)");
+	          //  ResultSet rs = preparedStatement.executeQuery();
+	           
+	            	PreparedStatement ps = con.prepareStatement("insert into daily(dailydate,TMAX,TMIN) values (?, ?, ?)");
 	            	ps.setDate(1, (new java.sql.Date(d.getTime())));
-	            	ps.setDouble(2, TMAX);
-	            	ps.setDouble(3,TMIN);
+	            	ps.setDouble(2,weather.TMAX);
+	            	ps.setDouble(3,weather.TMIN);
 	            	ps.executeUpdate();
 	            	
-	            }
-	            else 
-	            {
-	            	PreparedStatement p = con.prepareStatement("update daily set TMAX=?, TMIN=?" + "where DAILYDATE=?");
-	            	p.setDouble(1,TMAX);
-	            	p.setDouble(2,TMIN);
-	            	p.setDate(3,(new java.sql.Date(d.getTime())));
-	                p.executeUpdate();
+	           
 	                
-	            }
+	            
 	            return 1;
 	            
 		} 
