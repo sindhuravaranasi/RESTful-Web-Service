@@ -6,12 +6,14 @@ The project is about performing CRUD operations on *Daily.csv* to:
 
 1. Read all the weather details using GET 
 1. Read the details of a particular date using GET
-1. Add/update using POST
+1. Add using POST
 1. Delete the details of a particular date using DELETE
+1. Forecast the weather of upto 7 days for a given date using GET
 
 **Platform/Technologies Used**
 * MySQL to import the data of *Daily.csv* into database and perform the operations on the data
 * Servlets to implement the Dao and service methods
+* REST API to call the methods in HTTP
 
 **Procedure Followed**
 
@@ -38,7 +40,7 @@ The project is about performing CRUD operations on *Daily.csv* to:
 
 * *URL*
 
-  http://varanasisindhura.tk:8080/Weather/rest/historical
+  http://sindhuravaranasi.hopto.org:8080/WeatherAPI/rest/api/historical
 
 * *Method:*
 
@@ -51,7 +53,7 @@ The project is about performing CRUD operations on *Daily.csv* to:
 * *Success Response:*
 
   * *Code:* 200 <br />
-    *Content:* `[{"dATE":"20130101"},{"dATE":"20130102"}]`
+    *Content:* `[{"DATE":"20130101"},{"DATE":"20130102"},{"DATE":"20130103"},{"DATE":"20130104"},{"DATE":"20130105"},{"DATE":"20130106"},{"DATE":"20130107"},{"DATE":"20130108"}...}]`
  
 * *Error Response:*
 
@@ -64,11 +66,11 @@ The project is about performing CRUD operations on *Daily.csv* to:
 
 * *URL*
 
-  http://varanasisindhura.tk:8080/Weather/rest/historical/{DATE(yyyyMMdd)}
+  http://sindhuravaranasi.hopto.org:8080/WeatherAPI/rest/api/historical/{DATE(yyyyMMdd)}
   
 * *SAMPLE URL*
 
-  http://varanasisindhura.tk:8080/Weather/rest/historical/20130302
+  http://sindhuravaranasi.hopto.org:8080/WeatherAPI/rest/api/historical/20150902
 
 * *Method:*
 
@@ -85,7 +87,7 @@ The project is about performing CRUD operations on *Daily.csv* to:
 * *Success Response:*
 
   * *Code:* 200 <br />
-    *Content:* `{"dATE":"20130302","tMAX":30.5,"tMIN":26.5}`
+    *Content:* `{"DATE":"20150902","TMAX":90.0,"TMIN":65.0}`
  
 * *Error Response:*
 
@@ -93,15 +95,15 @@ The project is about performing CRUD operations on *Daily.csv* to:
   
 3. *Adding weather details for a given date into the database*
 ----
-  Returns json object containing the date whose data is added.
+  Returns json object containing the date whose data is added. Pass the input parameters in the body, in JSON format.
 
 * *URL*
 
-  http://varanasisindhura.tk:8080/Weather/rest/historical/{DATE(yyyyMMdd)}
+  http://sindhuravaranasi.hopto.org:8080/WeatherAPI/rest/api/historical
   
 * *SAMPLE URL*
 
-  http://varanasisindhura.tk:8080/Weather/rest/historical
+  http://sindhuravaranasi.hopto.org:8080/WeatherAPI/rest/api/historical/
 
 * *Method:*
 
@@ -113,7 +115,7 @@ The project is about performing CRUD operations on *Daily.csv* to:
   
 * *Sample Input Parameters:*
 
-  {   "DATE": "20140311", "TMAX": 60.5, "TMIN": 55.3 }  
+  {"DATE": "20170211", "TMAX": 60.5, "TMIN": 55.3}  
   
 * *Output Parameters:*
 
@@ -122,12 +124,12 @@ The project is about performing CRUD operations on *Daily.csv* to:
 * *Success Response:*
 
   * *Code:* 201 <br />
-    *Content:* `{"DATE": "20140311"}`
+    *Content:* `{"DATE": "20170211"}`
  
 * *Error Response:*
 
-  * *Code:* 500 INTERNAL SERVER ERROR <br />
-    *Content:* `{"Error": "Unparseable date"}`
+  * *Code:* 400 Bad Request <br />
+  
     
 4. *Deleting Weather details for a given date*
 ----
@@ -135,11 +137,11 @@ The project is about performing CRUD operations on *Daily.csv* to:
 
 * *URL*
 
-  http://varanasisindhura.tk:8080/Weather/rest/historical/{DATE(yyyyMMdd)}
+  http://sindhuravaranasi.hopto.org:8080/WeatherAPI/rest/api/historical/{DATE(yyyyMMdd)}
   
 * *SAMPLE URL*
 
-  http://varanasisindhura.tk:8080/Weather/rest/historical/20150712
+  http://sindhuravaranasi.hopto.org:8080/WeatherAPI/rest/api/historical/20170211
 
 * *Method:*
 
@@ -151,17 +153,17 @@ The project is about performing CRUD operations on *Daily.csv* to:
   
 * *Output Parameters:*
 
-  JSONObject{"DATE":Date String(yyyyMMdd)}
+  * *Success/Error Code
   
 * *Success Response:*
 
-  * *Code:* 200 <br />
-  * *Content:* `{   "DATE": "20130101" }`
+  * *Code:* 204 No Content <br />
+  
  
 * *Error Response:*
 
   * *Code:* 404 NOT FOUND <br />
-  * *Content:* `{   "Response": "Deletion Not Successful" }`
+  
   
 5.*To Forecast 7 days of Weather from Given Date*
 ----
@@ -169,11 +171,11 @@ The project is about performing CRUD operations on *Daily.csv* to:
 
 * *URL*
 
-  http://varanasisindhura.tk:8080/Weather/rest/historical/forecast/{DATE(yyyyMMdd)}
+  http://sindhuravaranasi.hopto.org:8080/WeatherAPI/rest/api/forecast/{DATE(yyyyMMdd)}
   
 * *SAMPLE URL*
 
-  http://varanasisindhura.tk:8080/Weather/rest/historical/forecast/20120712
+  http://sindhuravaranasi.hopto.org:8080/WeatherAPI/rest/api/forecast/20170302
 
 * *Method:*
 
@@ -190,35 +192,43 @@ The project is about performing CRUD operations on *Daily.csv* to:
 * *Success Response:*
 
   * *Code:* 200 <br />
-  * *Content:* `[{
-    "dATE": "20120712",
-    "tMAX": 87.0,
-    "tMIN": 66.0
-}, {
-    "dATE": "20120713",
-    "tMAX": 82.0,
-    "tMIN": 69.0
-}, {
-    "dATE": "20120714",
-    "tMAX": 82.0,
-    "tMIN": 71.0
-}, {
-    "dATE": "20120715",
-    "tMAX": 87.0,
-    "tMIN": 70.0
-}, {
-    "dATE": "20120716",
-    "tMAX": 93.0,
-    "tMIN": 71.0
-}, {
-    "dATE": "20120717",
-    "tMAX": 95.0,
-    "tMIN": 74.0
-}, {
-    "dATE": "20120718",
-    "tMAX": 90.0,
-    "tMIN": 72.0
-}]`
+  * *Content:* `[
+  {
+    "DATE": "20170302",
+    "TMAX": 43,
+    "TMIN": 32
+  },
+  {
+    "DATE": "20170303",
+    "TMAX": 37,
+    "TMIN": 27
+  },
+  {
+    "DATE": "20170304",
+    "TMAX": 41,
+    "TMIN": 26
+  },
+  {
+    "DATE": "20170305",
+    "TMAX": 64,
+    "TMIN": 29
+  },
+  {
+    "DATE": "20170306",
+    "TMAX": 56,
+    "TMIN": 50
+  },
+  {
+    "DATE": "20170307",
+    "TMAX": 58,
+    "TMIN": 43
+  },
+  {
+    "DATE": "20170308",
+    "TMAX": 59,
+    "TMIN": 39
+  }
+]`
  
 * *Error Response:*
 
