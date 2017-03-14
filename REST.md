@@ -103,7 +103,7 @@ The project is about performing CRUD operations on *Daily.csv* to:
   
 * *SAMPLE URL*
 
-  http://sindhuravaranasi.hopto.org:8080/WeatherAPI/rest/api/historical/
+  http://sindhuravaranasi.hopto.org:8080/WeatherAPI/rest/api/historical
 
 * *Method:*
 
@@ -153,7 +153,7 @@ The project is about performing CRUD operations on *Daily.csv* to:
   
 * *Output Parameters:*
 
-  * *Success/Error Code
+  * Success/Error Code
   
 * *Success Response:*
 
