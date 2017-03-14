@@ -1,37 +1,26 @@
 package com.weather;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-
+@XmlRootElement
 public class Weather {
-	private String DATE; 
-	  private double TMAX; 
-	   private double TMIN;
-	   
 	
-	   public String getDate() {
-		      return DATE; 
-		   } 
-	   
-		   public void setDate(String DATE) { 
-		      this.DATE = DATE; 
-		   } 
-		   
-		   public double getTMax() { 
-		      return TMAX; 
-		   } 
-		  
-		      public void setTMax(double TMAX) { 
-		      this.TMAX = TMAX; 
-		   } 
-		   public double getTMin() { 
-			      return TMIN; 
-			   } 
-		  
-			      public void setTMin(double TMIN) { 
-			      this.TMIN = TMIN; 
-			   }  
-			      
-			   
-		   
+	@XmlElement public String DATE;
+	@XmlElement public double TMAX;
+	@XmlElement public double TMIN;
+	
+	public Weather()
+	{
+		
+	}
+	
+	public Weather(String DATE, double TMAX, double TMIN)
+	{
+		this.DATE=DATE;
+		this.TMAX=TMAX;
+		this.TMIN=TMIN;
+	}
+	
 
 }
